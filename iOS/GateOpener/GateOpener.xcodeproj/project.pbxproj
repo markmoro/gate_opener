@@ -21,6 +21,7 @@
 		4D2C435218D42E96000E3ECE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D2C433418D42E96000E3ECE /* UIKit.framework */; };
 		4D2C435A18D42E96000E3ECE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4D2C435818D42E96000E3ECE /* InfoPlist.strings */; };
 		4D2C435C18D42E96000E3ECE /* GateOpenerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D2C435B18D42E96000E3ECE /* GateOpenerTests.m */; };
+		4D2C436718D42F57000E3ECE /* SetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D2C436618D42F57000E3ECE /* SetupViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		4D2C435718D42E96000E3ECE /* GateOpenerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GateOpenerTests-Info.plist"; sourceTree = "<group>"; };
 		4D2C435918D42E96000E3ECE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4D2C435B18D42E96000E3ECE /* GateOpenerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GateOpenerTests.m; sourceTree = "<group>"; };
+		4D2C436518D42F57000E3ECE /* SetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupViewController.h; sourceTree = "<group>"; };
+		4D2C436618D42F57000E3ECE /* SetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +122,8 @@
 				4D2C434618D42E96000E3ECE /* ViewController.m */,
 				4D2C434818D42E96000E3ECE /* Images.xcassets */,
 				4D2C433718D42E96000E3ECE /* Supporting Files */,
+				4D2C436518D42F57000E3ECE /* SetupViewController.h */,
+				4D2C436618D42F57000E3ECE /* SetupViewController.m */,
 			);
 			path = GateOpener;
 			sourceTree = "<group>";
@@ -249,6 +254,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D2C436718D42F57000E3ECE /* SetupViewController.m in Sources */,
 				4D2C434718D42E96000E3ECE /* ViewController.m in Sources */,
 				4D2C434118D42E96000E3ECE /* AppDelegate.m in Sources */,
 				4D2C433D18D42E96000E3ECE /* main.m in Sources */,

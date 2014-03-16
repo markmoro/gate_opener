@@ -12,6 +12,7 @@ def index():
 	u = uuid.uuid4()
 	global token
 	token = u.bytes.encode("base64")[:20]
+	print token
 	return token
 
 
@@ -19,6 +20,7 @@ def index():
 def do_open():
 	digest = request.forms.get('d')
 	check = check = hmac.new(key,token+'open',hashlib.sha1).hexdigest()
+	print check
 	if check == digest:
 		print 'Correct Digest'
 		return 'Correct'
