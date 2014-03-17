@@ -2,7 +2,7 @@
   Non replay request
   
   This code is a simple 2 request secure request for Arduino
-  It works by having a shared secret between the client and the Arduino (hmacKey).
+  It works by having a shatred seceret between the client and the arduino (hmacKey).
   The first request generated a random token which is passed back to the client.
   The client then appends a command ("open") to the token and creates the hmac digest which it sends back to the server.
   The server can then verify the request using the hmac key.
@@ -10,9 +10,9 @@
   The above method should be able to avoid replay attacks.  There are a few limitations:-
   
     -  There is only one token which changes on every token request.   This means that it only supports one client
-       at a time.   There is also no checking around this so if multiple client use the server it won't work properly
+       at a time.   There is also no checking arround this so if multiple client use the server it won't work properly
        
-    -  The random() function is somewhat predictable.  An improvement would be to seed the random generator with
+    -  The random() function is somewhat predicatble.  An improvement would be to seed the random geneator with
        some "noise" from an analogue pin.
  
    
@@ -20,13 +20,13 @@
 
 #include <SPI.h>
 #include <Ethernet.h>
-#include "sha256.h"
+#include "sha1.h"
 
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = { 
   0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192,168,0,177);
+IPAddress ip(192,168,1,177);
 int openPin = 4;                 // LED connected to digital pin 13
 int inPin  =2;
 // Initialize the Ethernet server library
@@ -41,6 +41,8 @@ char requestBuffer[requestBufferSize];
 
 //  Randon key for HMAC - Should chane
 char * hmacKey = "TESTHMACKEY";
+
+
 void setup() {
   pinMode(openPin, OUTPUT); 
   pinMode(inPin, INPUT); 
@@ -62,14 +64,24 @@ void setup() {
 
 void generateToken(EthernetClient client) {
 
+ 
   for(int i=0;i<15;i++) {
       token[i]= (char)random(26)+65;
   }
-  token[15]='\n';
+  token[15]=0;
   //  Just return the token (no markup)
-  client.println(token);
-  client.println("Content-Type: text/plain");
-  client.println("Connection: close");  // the connection will be closed after completion of the response  
+  
+     Serial.println("Token ");
+     Serial.println(token);
+     client.println("HTTP/1.1 200 OK");
+     client.println("Content-Type: text/plain");
+     client.println("Connection: close");
+     client.println();          
+      client.println(token);
+           Serial.println("Sent ");
+
+ // client.println("Content-Type: text/plain");
+  //client.println("Connection: close");  // the connection will be closed after completion of the response  
 }
 
 void openGate() {
@@ -79,16 +91,21 @@ void openGate() {
 }
 
 void generateOpen(EthernetClient client, char * digest) {
-  Sha256.initHmac((uint8_t*)hmacKey,20);
-  Sha256.print(token);
-  Sha256.print("open");
-  if(strcmp(digest,(char*)Sha256.resultHmac()) != 0) {
+  Sha1.initHmac((uint8_t*)hmacKey,20);
+  Sha1.print(token);
+  Sha1.print("open");
+  client.println("HTTP/1.1 200 OK");
+  client.println("Content-Type: text/plain");
+  client.println("Connection: close");
+         client.println();          
+ 
+    
+  if(strcmp(digest,(char*)Sha1.resultHmac()) != 0) {
       client.println("OK");
       openGate();
   } else
       client.println("FAIL");
-  client.println("Content-Type: text/plain");
-  client.println("Connection: close");  // the connection will be closed after completion of the response  
+
 }
 
 
@@ -107,7 +124,7 @@ void checkButton() {
 
 
 void loop() {
-  
+
   checkButton();
   // listen for incoming clients
   EthernetClient client = server.available();
@@ -119,8 +136,9 @@ void loop() {
     boolean isOpenRequest =false;
     boolean digestSet =false;
     char digest[20];
+        int bufPos =0;
     while (client.connected()) {
-      int bufPos =0;
+  
       if (client.available()) {
         char c = client.read();
         if(bufPos < (requestBufferSize-1)) {
@@ -137,11 +155,13 @@ void loop() {
             else if (isOpenRequest && digestSet) {
               generateOpen(client,digest);
             }
+                      break;
         }
         if (c == '\n') {
+    
          if(strncmp(requestBuffer,"GET /token",10) == 0) 
            isTokenRequest = true;
-         if(strncmp(requestBuffer,"PUT /open",9) == 0) 
+         if(strncmp(requestBuffer,"POST /open",10) == 0) 
            isOpenRequest = true;
          if(strncmp(requestBuffer,"d=",2) && bufPos >21) {
            strncpy(digest, requestBuffer+2, 20);
@@ -150,9 +170,11 @@ void loop() {
   
           requestBuffer[bufPos]=0;     
           bufPos =0;     
+                          
           currentLineIsBlank = true;
         } 
         else if (c != '\r') {
+       
           // you've gotten a character on the current line
           currentLineIsBlank = false;
         }

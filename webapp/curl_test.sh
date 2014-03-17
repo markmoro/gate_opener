@@ -1,10 +1,13 @@
 #!/bin/bash    
 
-TOKEN=$(curl -s  http://localhost:8080/token)
+TOKEN=$(curl -s  http://192.168.1.177/token)
 CMD='open'
+
+echo $TOKEN
 
 DIGEST=$(echo  -n "$TOKEN$CMD" | openssl sha1 -hmac "$HASH_KEY")
 
-curl -s --data "d=$DIGEST" http://localhost:8080/open
+RES=$(curl -s --data "d=$DIGEST" http://192.168.1.177/open)
+echo $RES
 
 echo
