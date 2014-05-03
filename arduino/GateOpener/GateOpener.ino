@@ -39,7 +39,7 @@ char token[16];
 const int requestBufferSize=512;
 char requestBuffer[requestBufferSize];
 
-//  Randon key for HMAC - Should chane
+//  Randon key for HMAC - Should change
 char * hmacKey = "TESTHMACKEY";
 
 
@@ -85,22 +85,46 @@ void generateToken(EthernetClient client) {
 }
 
 void openGate() {
-    digitalWrite(openPin, HIGH);  
-    delay(500);                  // waits for a second
-    digitalWrite(openPin, LOW);
+     Serial.println("bbOpen Suceess ");
+ //   digitalWrite(openPin, HIGH);  
+  //  delay(500);                  // waits for a second
+  //  digitalWrite(openPin, LOW);
 }
 
+
+void hashToString(uint8_t* hash, char* buffer) {
+  int i;
+  for (i=0; i<20; i++) {
+    buffer[i*2] = "0123456789abcdef"[hash[i]>>4];
+    buffer[i*2+1] = "0123456789abcdef"[hash[i]&0xf];
+  }
+  buffer[40]=0;
+}
+
+
+
 void generateOpen(EthernetClient client, char * digest) {
-  Sha1.initHmac((uint8_t*)hmacKey,20);
-  Sha1.print(token);
-  Sha1.print("open");
+  char hmBuffer[41];
+  char checkString[100];
+  Sha1.initHmac((uint8_t*)hmacKey,strlen(hmacKey));
+  strcpy(checkString, token);
+  strcat(checkString, "open");
+
+  Sha1.print(checkString);
+  Serial.println(checkString);
   client.println("HTTP/1.1 200 OK");
   client.println("Content-Type: text/plain");
   client.println("Connection: close");
-         client.println();          
- 
-    
-  if(strcmp(digest,(char*)Sha1.resultHmac()) != 0) {
+  client.println();      
+  
+  hashToString(Sha1.resultHmac(),hmBuffer);
+  Serial.println(digest);
+  Serial.println("***");
+  Serial.println(hmBuffer);
+  Serial.println("***");
+
+         
+  if(strcmp(digest,hmBuffer) == 0) {
       client.println("OK");
       openGate();
   } else
@@ -135,8 +159,9 @@ void loop() {
     boolean isTokenRequest =false;
     boolean isOpenRequest =false;
     boolean digestSet =false;
-    char digest[20];
-        int bufPos =0;
+    char digest[41];
+    int bufPos =0;
+    
     while (client.connected()) {
   
       if (client.available()) {
@@ -149,32 +174,48 @@ void loop() {
         // if you've gotten to the end of the line (received a newline
         // character) and the line is blank, the http request has ended,
         // so you can send a reply
-        if (c == '\n' && currentLineIsBlank) {
-            if(isTokenRequest)
+        if ((c == '\n' || c==0) && currentLineIsBlank) {
+            if(isTokenRequest) {
               generateToken(client);
-            else if (isOpenRequest && digestSet) {
-              generateOpen(client,digest);
+              break;
             }
-                      break;
+            else if (isOpenRequest) {
+               // Read next line
+                bufPos =0;     
+                 c = client.read();  
+               while(client.available())
+                {
+      
+                    requestBuffer[bufPos++]=c;
+                    c=client.read(); 
+                }
+                requestBuffer[bufPos++]=c;
+                requestBuffer[bufPos++]=0;
+               if(strncmp(requestBuffer,"d=",2) == 0 && bufPos >41) {
+                  strncpy(digest, requestBuffer+2, 40);
+                  digest[40]=0;
+                  Serial.println("Digest Rec");
+                  Serial.println(requestBuffer);
+                  digestSet = true;
+                  generateOpen(client,digest);
+               }
+            
+              break;
+            }
+      //      
         }
-        if (c == '\n') {
+        if (c == '\n'){
+          if(strncmp(requestBuffer,"GET /token",10) == 0) 
+            isTokenRequest = true;
+          if(strncmp(requestBuffer,"POST /open",10) == 0) 
+            isOpenRequest = true;
     
-         if(strncmp(requestBuffer,"GET /token",10) == 0) 
-           isTokenRequest = true;
-         if(strncmp(requestBuffer,"POST /open",10) == 0) 
-           isOpenRequest = true;
-         if(strncmp(requestBuffer,"d=",2) && bufPos >21) {
-           strncpy(digest, requestBuffer+2, 20);
-           digestSet = true;
-         }
   
-          requestBuffer[bufPos]=0;     
-          bufPos =0;     
-                          
-          currentLineIsBlank = true;
+           requestBuffer[bufPos]=0;     
+           bufPos =0;                 
+           currentLineIsBlank = true;
         } 
         else if (c != '\r') {
-       
           // you've gotten a character on the current line
           currentLineIsBlank = false;
         }

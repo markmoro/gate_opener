@@ -34,12 +34,32 @@
 }
 
 
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(self.currentLocation.coordinate, 300, 300);
+    MKCoordinateRegion adjustedRegion = [self.map regionThatFits:viewRegion];
+    [self.map setRegion:adjustedRegion animated:YES];
+    self.map.showsUserLocation = YES;
+    self.code.text = [[NSUserDefaults standardUserDefaults] valueForKey:@"code"];
+}
+
 -(IBAction)centerSet:(id)sender {
+    CLLocationCoordinate2D centerCoordinate = [self.map centerCoordinate];
+    [[NSUserDefaults standardUserDefaults] setDouble:centerCoordinate.latitude forKey:@"latitude"];
+    [[NSUserDefaults standardUserDefaults] setDouble:centerCoordinate.longitude forKey:@"longitude"];
     
+    [[NSUserDefaults standardUserDefaults] setDouble:8.0 forKey:@"radius"];
     
 }
+
 -(IBAction)codeSet:(id)sender {
+    // Probably should go in keychain but as this is not being distrbuted it proabbly ok in user defaults
+    [[NSUserDefaults standardUserDefaults] setValue:self.code.text forKey:@"code"];
     
 }
+
+
 
 @end

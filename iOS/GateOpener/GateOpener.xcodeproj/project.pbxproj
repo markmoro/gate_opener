@@ -22,6 +22,7 @@
 		4D2C435A18D42E96000E3ECE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4D2C435818D42E96000E3ECE /* InfoPlist.strings */; };
 		4D2C435C18D42E96000E3ECE /* GateOpenerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D2C435B18D42E96000E3ECE /* GateOpenerTests.m */; };
 		4D2C436718D42F57000E3ECE /* SetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D2C436618D42F57000E3ECE /* SetupViewController.m */; };
+		4D382BA318DCF475002011D2 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D382BA218DCF475002011D2 /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		4D2C435B18D42E96000E3ECE /* GateOpenerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GateOpenerTests.m; sourceTree = "<group>"; };
 		4D2C436518D42F57000E3ECE /* SetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupViewController.h; sourceTree = "<group>"; };
 		4D2C436618D42F57000E3ECE /* SetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupViewController.m; sourceTree = "<group>"; };
+		4D382BA218DCF475002011D2 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D382BA318DCF475002011D2 /* MapKit.framework in Frameworks */,
 				4D2C433318D42E96000E3ECE /* CoreGraphics.framework in Frameworks */,
 				4D2C433518D42E96000E3ECE /* UIKit.framework in Frameworks */,
 				4D2C433118D42E96000E3ECE /* Foundation.framework in Frameworks */,
@@ -104,6 +107,7 @@
 		4D2C432F18D42E96000E3ECE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4D382BA218DCF475002011D2 /* MapKit.framework */,
 				4D2C433018D42E96000E3ECE /* Foundation.framework */,
 				4D2C433218D42E96000E3ECE /* CoreGraphics.framework */,
 				4D2C433418D42E96000E3ECE /* UIKit.framework */,
@@ -204,6 +208,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Invoax;
 				TargetAttributes = {
+					4D2C432C18D42E96000E3ECE = {
+						DevelopmentTeam = K27Y83CTH8;
+					};
 					4D2C434D18D42E96000E3ECE = {
 						TestTargetID = 4D2C432C18D42E96000E3ECE;
 					};
@@ -341,7 +348,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -374,6 +381,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -384,9 +392,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GateOpener/GateOpener-Prefix.pch";
 				INFOPLIST_FILE = "GateOpener/GateOpener-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -397,9 +407,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GateOpener/GateOpener-Prefix.pch";
 				INFOPLIST_FILE = "GateOpener/GateOpener-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -466,6 +478,7 @@
 				4D2C436118D42E96000E3ECE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4D2C436218D42E96000E3ECE /* Build configuration list for PBXNativeTarget "GateOpenerTests" */ = {
 			isa = XCConfigurationList;
@@ -474,6 +487,7 @@
 				4D2C436418D42E96000E3ECE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

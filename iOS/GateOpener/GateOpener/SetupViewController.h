@@ -11,6 +11,7 @@
 
 @property (nonatomic) IBOutlet UITextField * code;
 @property (nonatomic) IBOutlet MKMapView * map;
+@property (nonatomic) CLLocation* currentLocation;
 
 
 -(IBAction)centerSet:(id)sender;

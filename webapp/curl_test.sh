@@ -3,10 +3,12 @@
 TOKEN=$(curl -s  http://192.168.1.177/token)
 CMD='open'
 
-echo $TOKEN
+DD=$TOKEN$CMD
+echo "$DD"
 
-DIGEST=$(echo  -n "$TOKEN$CMD" | openssl sha1 -hmac "$HASH_KEY")
+DIGEST=$(echo  -n "$DD" | openssl sha1 -hmac "$HASH_KEY")
 
+echo $DIGEST
 RES=$(curl -s --data "d=$DIGEST" http://192.168.1.177/open)
 echo $RES
 

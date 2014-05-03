@@ -19,8 +19,9 @@ def index():
 @post('/open') 
 def do_open():
 	digest = request.forms.get('d')
-	check = check = hmac.new(key,token+'open',hashlib.sha1).hexdigest()
+	check = hmac.new(key,token+'open',hashlib.sha1).hexdigest()
 	print check
+	print digest
 	if check == digest:
 		print 'Correct Digest'
 		return 'Correct'
